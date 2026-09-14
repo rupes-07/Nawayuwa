@@ -7,7 +7,14 @@
 
 require('dotenv').config();
 
-const required = ['SUPABASE_URL', 'SUPABASE_ANON_KEY', 'SUPABASE_SERVICE_ROLE_KEY'];
+const supabaseAnonKey = process.env.SUPABASE_ANON_KEY || process.env.SUPABASE_PUBLISHABLE_KEY;
+const supabaseServiceRoleKey =
+  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_SECRET_KEY;
+
+const required = ['SUPABASE_URL'];
+
+if (!supabaseAnonKey) required.push('SUPABASE_PUBLISHABLE_KEY');
+if (!supabaseServiceRoleKey) required.push('SUPABASE_SECRET_KEY');
 
 const missing = required.filter((key) => !process.env[key]);
 
@@ -25,8 +32,8 @@ const env = {
   API_PREFIX: process.env.API_PREFIX || '/api/v1',
 
   SUPABASE_URL: process.env.SUPABASE_URL,
-  SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
-  SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
+  SUPABASE_ANON_KEY: supabaseAnonKey,
+  SUPABASE_SERVICE_ROLE_KEY: supabaseServiceRoleKey,
 
   DATABASE_URL: process.env.DATABASE_URL,
 
